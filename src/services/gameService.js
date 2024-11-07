@@ -1,5 +1,5 @@
 
-import prisma from '../config/database';
+import prisma from '../config/database.js';
 
 export const startNewGame = async (userId, busId) => {
   return await prisma.gameSession.create({

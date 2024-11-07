@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -11,4 +7,25 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  userId     Int      // ID of the user submitting the review
+  busId      Int
+  rating     Int      // Rating out of 5
+  feedback   String?  // Optional feedback text
+  service    String?  // Additional feedback on service, optional
+  images     String[] // Array of image URLs if provided
+  createdAt  DateTime @default(now())
+
+  bus        Bus      @relation(fields: [busId], references: [id]) // Relation field for Bus model
+}
+
+model Bus {
+  id        Int      @id @default(autoincrement())
+  name      String
+  route     String
+  schedule  String
+  reviews   Review[] // Relation field for Review model
 }

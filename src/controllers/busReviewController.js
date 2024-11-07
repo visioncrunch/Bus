@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import { submitReview, getBusInfo } from '../services/busReviewService';
+import { submitReview, getBusInfo, getReviewsForBus } from '../services/busReviewService.js';
 
-export const getBusInfoController = async (req: Request, res: Response) => {
+export const getBusInfoController = async (req, res) => {
   const busId = parseInt(req.params.busId);
   try {
     const busInfo = await getBusInfo(busId); // Call the service function
@@ -11,12 +10,24 @@ export const getBusInfoController = async (req: Request, res: Response) => {
   }
 };
 
-export const submitBusReview = async (req: Request, res: Response) => {
+export const submitBusReview = async (req, res) => {
   const { userId, busId, rating, feedback, service, images } = req.body;
   try {
     const review = await submitReview(userId, busId, rating, feedback, service, images);
-    res.status(201).json(review);
+    res.status(201).json(review); // Return the created review
   } catch (error) {
-    res.status(500).json({ message: 'Error submitting review' });
+    console.error(error); // Log the error details to the console for debugging
+    res.status(500).json({ message: 'Error submitting review', error: error.message });
+  }
+};
+
+export const fetchBusReviews = async (req, res) => {
+  const busId = parseInt(req.params.busId);
+  try {
+    const reviews = await getReviewsForBus(busId);
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error(error); // Log the error details to the console for debugging
+    res.status(500).json({ message: 'Error submitting review', error: error.message });
   }
 };

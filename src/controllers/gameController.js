@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import { startNewGame, submitGameAnswer } from '../services/gameService';
+import { startNewGame, submitGameAnswer } from '../services/gameService.js';
 
-export const startGame = async (req: Request, res: Response) => {
+export const startGame = async (req, res) => {
   const { userId, busId } = req.body;
   try {
     const game = await startNewGame(userId, busId);
@@ -11,7 +10,7 @@ export const startGame = async (req: Request, res: Response) => {
   }
 };
 
-export const submitGameAnswerController = async (req: Request, res: Response) => {
+export const submitGameAnswerController = async (req, res) => {
   const { userId, gameSessionId, answer } = req.body;
   try {
     const result = await submitGameAnswer(userId, gameSessionId, answer); // Call the service function
