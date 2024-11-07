@@ -13,7 +13,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/routes/gameRoutes.js", "src/server.js", "src/prismaClient.js", "src/app.js", "src/utils/responseUtil.js", "src/utils/qrCodeUtil.js", "src/sockets/gameSocket.js", "src/services/gameService.js", "src/services/busReviewService.js", "src/routes/busRoutes.js", "src/middlewares/errorHandler.js", "src/controllers/gameController.js", "src/controllers/busReviewController.js", "src/config/database.js"  ],
   "exclude": [
     "node_modules"
   ]

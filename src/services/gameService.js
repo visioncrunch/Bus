@@ -1,7 +1,7 @@
 
 import prisma from '../config/database';
 
-export const startNewGame = async (userId: number, busId: number) => {
+export const startNewGame = async (userId, busId) => {
   return await prisma.gameSession.create({
     data: {
       userId,
@@ -11,7 +11,7 @@ export const startNewGame = async (userId: number, busId: number) => {
   });
 };
 
-export const submitGameAnswer = async (userId: number, gameSessionId: number, answer: string) => {
+export const submitGameAnswer = async (userId, gameSessionId, answer) => {
   // Evaluate the answer and update the score
   const session = await prisma.gameSession.update({
     where: { id: gameSessionId },
