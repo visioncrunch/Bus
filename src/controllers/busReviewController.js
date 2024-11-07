@@ -1,4 +1,4 @@
-import { submitReview, getBusInfo, getReviewsForBus } from '../services/busReviewService.js';
+import { submitReview, getBusInfo, getReviewsForBus, updateReview, deleteReview } from '../services/busReviewService.js';
 
 export const getBusInfoController = async (req, res) => {
   const busId = parseInt(req.params.busId);
@@ -29,5 +29,25 @@ export const fetchBusReviews = async (req, res) => {
   } catch (error) {
     console.error(error); // Log the error details to the console for debugging
     res.status(500).json({ message: 'Error submitting review', error: error.message });
+  }
+};
+export const updateReviewController = async (req, res) => {
+  const { reviewId, userId, rating, feedback, service, images } = req.body;
+  try {
+    const updatedReview = await updateReview(reviewId, userId, rating, feedback, service, images);
+    res.status(200).json(updatedReview); // Return the updated review
+  } catch (error) {
+    console.error(error); // Log the error details for debugging
+    res.status(500).json({ message: 'Error updating review', error: error.message });
+  }
+};
+export const deleteReviewController = async (req, res) => {
+  const { reviewId } = req.params;
+  try {
+    const deletedReview = await deleteReview(parseInt(reviewId));
+    res.status(200).json({ message: 'Review deleted successfully', deletedReview });
+  } catch (error) {
+    console.error(error); // Log the error details for debugging
+    res.status(500).json({ message: 'Error deleting review', error: error.message });
   }
 };

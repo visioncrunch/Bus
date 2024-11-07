@@ -55,3 +55,43 @@ export const getBusInfo = async (busId) => {
     throw error;
   }
 };
+
+export const updateReview = async (reviewId, userId, rating, feedback, service, images) => {
+  try {
+    const review = await prisma.review.update({
+      where: { id: reviewId },
+      data: {
+        rating,
+        feedback,
+        service,
+        images, // Update the images array
+      },
+    });
+
+    if (!review) {
+      throw new Error('Review not found');
+    }
+
+    return review;
+  } catch (error) {
+    console.error('Error updating review:', error);
+    throw error;
+  }
+};
+
+export const deleteReview = async (reviewId) => {
+  try {
+    const review = await prisma.review.delete({
+      where: { id: reviewId },
+    });
+
+    if (!review) {
+      throw new Error('Review not found');
+    }
+
+    return review;
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    throw error;
+  }
+};
