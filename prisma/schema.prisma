@@ -1,5 +1,3 @@
-// schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -28,4 +26,41 @@ model Bus {
   route     String
   schedule  String
   reviews   Review[] // Relation field for Review model
+}
+model User {
+  id          Int           @id @default(autoincrement())  // Unique identifier for the user
+  firstName   String        // User's first name
+  lastName    String        // User's last name
+  email       String        @unique // User's email, unique for each user
+  phoneNumber String?       // User's phone number (optional)
+  password    String        // Encrypted password
+  createdAt   DateTime      @default(now()) // Timestamp when the user account was created
+  updatedAt   DateTime      @updatedAt // Automatically updates the timestamp whenever the user record is updated
+
+  lostFoundItems LostFoundItem[] // A relation to LostFoundItem model for the lost/found posts created by the user
+}
+
+// Lost and Found Item Model
+model LostFoundItem {
+  id                        Int      @id @default(autoincrement())  // Unique ID for the post
+  userId                    Int      // ID of the user who created the post
+  postId                    String   @unique// Unique post ID for the lost/found item
+  postDate                  DateTime @default(now()) // Date when the post was created
+  images                    String[] // Array of image URLs
+  title                     String   // Title of the lost/found item post
+  description              String   // Detailed description of the lost/found item
+  lostAt                    DateTime? // Date and time when the item was lost
+  foundAt                   DateTime? // Date and time when the item was found
+  keywords                  String[] // Keywords related to the item (e.g. "keys", "phone")
+  contactInfo              String   // Contact info (phone number or email) to reach the poster
+  reward                   String?  // Reward for finding the item (only applicable to lost items)
+  lostItemRetrievedStatus  Boolean  @default(false) // Status if the lost item was retrieved
+  foundItemRetrievedStatus Boolean @default(false) // Status if the found item was retrieved
+  postStatus                String   @default("active") // Status of the post (active, deleted, etc.)
+  
+  // Relation to User (assuming User model exists)
+  user                      User     @relation(fields: [userId], references: [id])
+
+  // Ensure that after 7 days, posts are marked for deletion or automatic deletion in background jobs
+  createdAt                 DateTime @default(now()) // Timestamp of when the post was created
 }
